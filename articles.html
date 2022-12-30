@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animal world</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="src/main.css">
+    <link rel="apple-touch-icon" href="src/images/app_icon_x96.png">
+</head>
+<body>
+<div class="header">
+    <img style="height: 4em;" src="src/images/logo.png" class="logo">
+    <a>Animal world</a>
+    <div class="header-right">
+        <a href="/">Home</a>
+        <a class="active">Articles</a>
+    </div>
+</div>
+<div class="offset">
+    <h1>Articles</h1>
+    <form>
+        <p style="color:#DA7422; font-weight: bold">New post</p>
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title">
+        </div>
+        <br>
+        <div>
+            <label for="description">Description:</label>
+            <input type="text" id="description">
+        </div>
+        <br>
+        <div>
+            <label for="content">Content:</label>
+            <textarea rows="5" cols="80" id="content"></textarea>
+        </div>
+        <br>
+        <div>
+            <video id="player" width="400px" height="400px" autoplay></video>
+            <button id="capture">Capture</button>
+            <canvas id="canvas"></canvas>
+        </div>
+        <br>
+        <button id="submit" type="submit">Post!</button>
+    </form>
+</div>
+<div class="offset">
+    <h3>Alligator vs Crocodile</h3>
+    <p>
+        When compared, the Alligator vs. Crocodile may both seem very similar, but some key differences exist.
+        Alligators are native to North America, while crocodiles can be found worldwide!<br> <br> In this article we will
+        deep-dive into their histories and all of their key differences.
+    </p>
+    <img height="400px" width="700px"
+         src="src/images/crocodiles.jpg"/>
+    <p>
+        Alligators tend to be smaller than crocodiles, with a broader snout. Meanwhile crocodiles have a long and
+        narrow snout. Alligators are typically greenish-black in color,
+        while crocodiles can be greenish-brown, gray, or even orange.<br>
+
+        However, these two giant reptile species diverge in many more aspects other than their physical differences.
+        Read on to uncover all there is to know about each of them, and how they differ from each other! <br><br>
+        Here we go: Crocodile vs Alligator.
+    </p>
+
+    <h4>Origin Of Alligators</h4>
+    <p>
+        Alligators are often feared because of their size and power, but these animals have a long and fascinating history. Alligators first appeared on Earth almost 50 million years ago and are one of the oldest species still in existence today.
+        <br><br>
+        Unlike many other animals, alligators have changed very little throughout their evolution. It is probably because they already had a successful body plan that allowed them to thrive in their environment, thus there was no need to evolve further.
+        <br><br>
+        Alligators are apex predators and skilled hunters, using their powerful jaws to crush their prey.
+        <br><br>
+        Also, alligators have thick layers of skin that help to protect them from being injured by their prey. Today, alligators can be found in wetlands worldwide, and they play an important role in maintaining the balance of their ecosystems.
+    </p>
+
+    <h4>Origin Of Crocodiles</h4>
+    <p>
+        Crocodiles are the most iconic group of animals on Earth. While they may not look particularly different from their ancient ancestors, they have undergone a dramatic transformation throughout their evolutionary history.
+        <br><br>
+        They first appeared during the Late Triassic period, roughly 200 million years ago. At that time, the planet was inhabited by various strange and often fearsome creatures, including giant reptiles known as dinosaurs.
+        <br><br>
+        Crocodiles would have been relatively small and inconspicuous compared to their gigantic contemporaries. However, they soon began to diversify and evolve into the many different species we know today.
+        <br><br>
+        Over the ensuing millions of years, crocodiles have become some of the most successful predators on the planet, inhabiting every major continent except Antarctica. They have also come to occupy a wide range of different habitats, from rivers and lakes to swamps and marshes.
+    </p>
+</div>
+<script type="module" src="imageCapture.js"></script>
+</body>
+</html>
