@@ -5,6 +5,7 @@ const STATIC_FILES = [
     "./offline.html",
     "./404.html",
     "./src/main.css",
+    "./src/images/logo.png",
     "./src/images/aquarium.jpg",
     "./src/images/aquarium_plants.jpg",
     "./src/images/cat.jpg",
@@ -44,8 +45,14 @@ self.addEventListener('activate', event => {
     );
 });
 
+/*
+CACHE FIRST - caching strategy
+This strategy will look for a response in the cache first.
+If a previously cached response is found, it will return and serve the cache.
+If not, it will fetch the response from the network, serve it, and cache it for next time.
+*/
 self.addEventListener('fetch', (event) => {
-    console.log("Intercepting fetch request for: ${e.request.url}");
+    console.log("Intercepting fetch request for:"+ event.request.url);
 
     event.respondWith((async () => {
         const cachedResponse = await caches.match(event.request);
@@ -54,9 +61,11 @@ self.addEventListener('fetch', (event) => {
         }
         try {
             const response = await fetch(event.request);
-            if (response.status === 404) {
-                return caches.match('/404.html')
-            }
+            const r = response.clone();
+            caches.open(CACHE_STATIC_NAME)
+                .then(function(cache){
+                    cache.put(event.request, r);
+                })
             return response;
         } catch(err) {
             console.log('Error:');
@@ -66,32 +75,31 @@ self.addEventListener('fetch', (event) => {
     })());
 });
 
-/*
 self.addEventListener('sync', function(event) {
     console.log('[Service Worker] Background syncing', event);
-    if (event.tag === 'sync-new-posts') {
-        console.log('[Service Worker] Syncing new Posts');
+    if (event.tag === 'sync-new-encyclopedias') {
+        console.log('[Service Worker] Syncing new encyclopedias');
         event.waitUntil(
-            readAllData('sync-posts')
+            readAllData('sync-encyclopedias')
                 .then(function(data) {
                     for (const dt of data) {
                         console.log("from indexdb: " + dt.name)
 
-                        fetch('/saveCars', {
+                        fetch('/saveEncyclopedias', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
                                 id: dt.id,
-                                name: dt.name,
-                                speed: dt.speed
+                                title: dt.title,
+                                description: dt.description
                             })
                         })
                             .then(function(res) {
                                 console.log('Sent data', res);
                                 if (res.ok) {
-                                    deleteItem('sync-posts', dt.id); // Isn't working correctly!
+                                    deleteItem('sync-encyclopedias', dt.id); // Isn't working correctly!
                                 }
                             })
                             .catch(function(err) {
@@ -103,6 +111,4 @@ self.addEventListener('sync', function(event) {
         );
     }
 });
-
- */
 

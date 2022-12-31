@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animal world</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="src/main.css">
+    <link rel="apple-touch-icon" href="src/images/app_icon_x96.png">
+</head>
+<body>
+<div class="header">
+    <img style="height: 4em;" src="src/images/logo.png" class="logo">
+    <a>Animal world</a>
+    <div class="header-right">
+        <a href="/">Home</a>
+        <a class="active">Encyclopedias</a>
+    </div>
+</div>
+<div class="offset">
+    <h1>Articles</h1>
+    <form>
+        <p style="color:#DA7422; font-weight: bold">New post</p>
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title">
+        </div>
+        <br>
+        <div>
+            <label for="description">Description:</label>
+            <textarea rows="5" cols="80" id="description"></textarea>
+        </div>
+        <br>
+        <br>
+        <div>
+            <video id="player" width="400px" height="400px" autoplay></video>
+            <button id="capture">Capture</button>
+            <canvas id="canvas"></canvas>
+        </div>
+        <br>
+        <button id="submit" type="submit">Post!</button>
+    </form>
+</div>
+<script type="module" src="imageCapture.js"></script>
+<script>
+    const titleInput = document.getElementById("title");
+    const descriptionInput = document.getElementById("description");
+    const submit = document.getElementById("submit");
+    submit.addEventListener('click', function (event) {
+        event.preventDefault()
+        if (titleInput.value.trim() === '' || descriptionInput.value.trim() === '') {
+            alert('Please enter valid data!');
+        }
+
+        if ('serviceWorker' in navigator && 'SyncManager' in window) {
+            navigator.serviceWorker.ready
+                .then(function(sw) {
+                    const encyclopedia = {
+                        id: new Date().toISOString(),
+                        title: titleInput.value,
+                        description: descriptionInput.value
+                    };
+                    writeData('sync-encyclopedias', encyclopedia)
+                        .then(function() {
+                            return sw.sync.register('sync-new-encyclopedias');
+                        })
+                        .catch(function(err) {
+                            console.log(err);
+                        });
+                });
+        }
+        window.location.reload()
+    });
+</script>
+</body>
+</html>

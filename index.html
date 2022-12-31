@@ -13,85 +13,17 @@
     <a>Animal world</a>
     <div class="header-right">
         <a class="active">Home</a>
-        <a href="/articles">Articles</a>
+        <a href="/encyclopedias">Encyclopedias</a>
     </div>
 </div>
 <div class="offset">
     <h1>Pet Encyclopedias</h1>
-    <ol>
-        <li><b>Aquarium Coral Reefs - Coral Reef Animals of The World</b></li>
-        <br>
-        <div>
-            <b>Description: </b>Coral information, pictures and care for keeping a reef tank aquarium;<br>
-            anemones, stony corals, soft and leather corals, mushrooms and zoanthids,<br>
-            clams and more
-        </div>
-        <br>
-        <div>
-            <img src="/src/images/aquarium.jpg" height="400px" width="700px">
-        </div>
-        <br>
-        <li><b>Aquarium Plants - Aquarium Plants of the World</b></li>
-        <br>
-        <div>
-            <b>Description: </b>Aquatic plant guides for ferns and mosses, stem plants, <br>rosette plants, and plants for the pond.<br>
-            Plants can be the main aquarium attraction
-            or used to enhance your aquarium's beauty and health.
-        </div>
-        <br>
-        <div>
-            <img src="/src/images/aquarium_plants.jpg" height="400px" width="700px">
-        </div>
+    <ol id="encyclopedias">
 
-        <br>
-        <li><b>Aquarium Tropical Fish - Freshwater Fish of the World</b></li>
-        <br>
-        <div>
-            <b>Description: </b>Fish guides for freshwater aquarium fish.<br>
-            Pictures, information and care for keeping tropical fish and goldfish tanks.
-        </div>
-        <br>
-        <div>
-            <img src="/src/images/tropical_fish.jpg" height="400px" width="700px">
-        </div>
-
-        <br>
-        <li><b>Birds - World of Exotic Pet Birds</b></li>
-        <br>
-        <div>
-            <b>Description: </b>Bird information, pictures and care for all types of birds: Parrots, Macaws, Amazons,<br>
-            Cockatiels, Cockatoos, Parakeets, Dove and Pigeons, Finches, Canaries, Conures and more
-        </div>
-        <br>
-        <div>
-            <img src="/src/images/parrot.jpg" height="400px" width="700px">
-        </div>
-
-        <br>
-        <li><b>Cats - World of Pet Cats</b></li>
-        <br>
-        <div>
-            <b>Description: </b>Cat guides for all types of cats from pet cats to the exotic cat.<br>
-            Domestic cat breeds include natural breed cats, hybrid cat breeds and cat mutations!
-        </div>
-        <br>
-        <div>
-            <img src="/src/images/cat.jpg" height="400px" width="700px">
-        </div>
-
-        <br>
-        <li><b>Dogs - World of Pet Dogs</b></li>
-        <br>
-        <div>
-            <b>Description: </b>Dog information, dog care, and dog pictures for all dog types!<br>
-            Herding Dogs, Hound Dogs, Sporting Dogs, Non-Sporting Dogs, Terriers, Toy Dogs and Working Dogs
-        </div>
-        <br>
-        <div>
-            <img src="/src/images/dog.jpg" height="400px" width="700px">
-        </div>
     </ol>
 </div>
+<script src="/idb.js"></script>
+<script src="/utility.js"></script>
 <script>
     if ('serviceWorker' in navigator){
         navigator.serviceWorker.register('/sw.js')
@@ -101,6 +33,37 @@
             console.log(err);
         });
     }
+</script>
+<script>
+        fetch("/getEncyclopedias").then((res) => {
+            console.log("res", res);
+            if(res.ok){
+                res.json().then((data) =>{
+                    data.encyclopedias.forEach((encyclopedia) =>{
+                        const template = document.querySelector('#encyclopedias')
+                        const bold = document.createElement('b')
+                        const titleDiv = document.createElement('li')
+                        bold.appendChild(titleDiv)
+
+                        template.appendChild(document.createElement('br'))
+
+                        const descriptionDiv = document.createElement('div')
+
+                        titleDiv.textContent = encyclopedia.title
+                        const bold2 = document.createElement('b')
+                        bold2.textContent = "Description:"
+                        descriptionDiv.textContent = encyclopedia.description
+
+                        template.appendChild(bold)
+                        template.appendChild(document.createElement('br'))
+                        template.appendChild(bold2)
+                        template.appendChild(descriptionDiv)
+
+                        template.appendChild(document.createElement('br'))
+                    })
+                })
+            }
+        })
 </script>
 </body>
 </html>
