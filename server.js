@@ -11,18 +11,18 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
-app.use(express.static(path.join(__dirname, "/")));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "/index.html"));
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.get("/encyclopedias", function (req, res) {
-    res.sendFile(path.join(__dirname, "/encyclopedias.html"));
+    res.sendFile(path.join(__dirname,"public", "encyclopedias.html"));
 });
 
 app.get("/offline", function (req, res) {
-    res.sendFile(path.join(__dirname, "/offline.html"));
+    res.sendFile(path.join(__dirname, "public", "offline.html"));
 });
 
 
