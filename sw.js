@@ -61,6 +61,9 @@ self.addEventListener('fetch', (event) => {
         }
         try {
             const response = await fetch(event.request);
+            if (response.status === 404) {
+                return caches.match('/404.html')
+            }
             const r = response.clone();
             caches.open(CACHE_STATIC_NAME)
                 .then(function(cache){
