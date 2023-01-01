@@ -3,6 +3,7 @@ importScripts('/utility.js');
 
 const CACHE_STATIC_NAME = 'static';
 const STATIC_FILES = [
+    "./",
     "./manifest.json",
     "./index.html",
     "./encyclopedias.html",
@@ -68,14 +69,13 @@ self.addEventListener('fetch', (event) => {
             if (response.status === 404) {
                 return caches.match('/404.html')
             }
-            /*
+
             const r = response.clone();
             caches.open(CACHE_STATIC_NAME)
                 .then(function(cache){
                     cache.put(event.request, r);
                 })
 
-             */
             return response;
         } catch(err) {
             console.log('Error:');
@@ -93,7 +93,7 @@ self.addEventListener('sync', function(event) {
             readAllData('sync-encyclopedias')
                 .then(function(data) {
                     for (const dt of data) {
-                        console.log("from indexdb: " + dt.name)
+                        console.log("from indexdb: " + dt.title)
 
                         fetch('/saveEncyclopedias', {
                             method: 'POST',
@@ -124,4 +124,45 @@ self.addEventListener('sync', function(event) {
         );
     }
 });
+
+self.addEventListener("notificationclick", function (event) {
+    let notification = event.notification;
+    console.log("notification", notification);
+    event.waitUntil(
+        clients.matchAll().then(function (clis) {
+            clis.forEach((client) => {
+                client.navigate(notification.data.redirectUrl);
+                client.focus();
+            });
+            notification.close();
+        })
+    );
+});
+
+self.addEventListener("notificationclose", function (event) {
+    console.log("notificationclose", event);
+});
+
+self.addEventListener("push", function (event) {
+    console.log("push event", event);
+
+    var data = { title: "title", body: "body", redirectUrl: "/" };
+
+    if (event.data) {
+        data = JSON.parse(event.data.text());
+    }
+
+    var options = {
+        body: data.body,
+        icon: "assets/img/android/app_icon_x96.png",
+        badge: "assets/img/android/app_icon_x96.png",
+        vibrate: [200, 100, 200, 100, 200, 100, 200],
+        data: {
+            redirectUrl: data.redirectUrl,
+        },
+    };
+
+    event.waitUntil(self.registration.showNotification(data.title, options));
+});
+
 
