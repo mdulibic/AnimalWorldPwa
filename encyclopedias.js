@@ -1,3 +1,5 @@
+import { get, set } from "https://cdn.jsdelivr.net/npm/idb-keyval@6/+esm";
+
 let player = document.getElementById("player");
 let canvas = document.getElementById("canvas");
 
@@ -44,30 +46,30 @@ document.getElementById("capture").addEventListener("click", function (event) {
     }
 });
 
-document
-    .getElementById("submit")
-    .addEventListener("click", function (event) {
-        event.preventDefault();
-        if ("serviceWorker" in navigator && "SyncManager" in window) {
-            let url = canvas.toDataURL();
-            fetch(url)
-                .then((res) => res.blob())
-                .then((blob) => {
-                    let ts = new Date().toISOString();
-                    return navigator.serviceWorker.ready;
-                })
-                .then((swRegistration) => {
-                    return swRegistration.sync.register("sync-snaps");
-                })
-                .then(() => {
-                    console.log("Queued for sync");
-                    startCapture();
-                })
-                .catch((error) => {
-                    alert(error);
-                    console.log(error);
-                });
-        } else {
-            alert("Background sync not supported!");
-        }
-    });
+const titleInput = document.getElementById("title");
+const descriptionInput = document.getElementById("description");
+const submit = document.getElementById("submit");
+submit.addEventListener('click', function (event) {
+    event.preventDefault()
+    if (titleInput.value.trim() === '' || descriptionInput.value.trim() === '') {
+        alert('Please enter valid data!');
+    }
+
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        navigator.serviceWorker.ready
+            .then(function(sw) {
+                const post = {
+                    id: new Date().toISOString(),
+                    title: titleInput.value,
+                    description: descriptionInput.value
+                };
+                writeData('sync-encyclopedias', post)
+                    .then(function() {
+                        return sw.sync.register('sync-new-encyclopedias');
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            });
+    }
+});

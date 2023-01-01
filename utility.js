@@ -2,7 +2,6 @@ var dbPromise = idb.open('encyclopedias-store', 1, function(db){
     if(!db.objectStoreNames.contains('sync-encyclopedias')){
         db.createObjectStore('sync-encyclopedias', {keyPath: 'id'});
     }
-   
 });
 
 function writeData(st, data) {
@@ -13,7 +12,6 @@ function writeData(st, data) {
         store.put(data);
         return tx.complete;
     });
-    
 }
 
 
