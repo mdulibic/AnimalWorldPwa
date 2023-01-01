@@ -2,6 +2,7 @@ const CACHE_STATIC_NAME = 'static';
 const STATIC_FILES = [
     "./manifest.json",
     "./index.html",
+    "./encyclopedias.html",
     "./offline.html",
     "./404.html",
     "./src/main.css",
