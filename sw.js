@@ -1,3 +1,6 @@
+importScripts('/idb.js');
+importScripts('/utility.js');
+
 const CACHE_STATIC_NAME = 'static';
 const STATIC_FILES = [
     "./manifest.json",
@@ -65,11 +68,14 @@ self.addEventListener('fetch', (event) => {
             if (response.status === 404) {
                 return caches.match('/404.html')
             }
+            /*
             const r = response.clone();
             caches.open(CACHE_STATIC_NAME)
                 .then(function(cache){
                     cache.put(event.request, r);
                 })
+
+             */
             return response;
         } catch(err) {
             console.log('Error:');
@@ -103,6 +109,9 @@ self.addEventListener('sync', function(event) {
                             .then(function(res) {
                                 console.log('Sent data', res);
                                 if (res.ok) {
+                                    self.registration.showNotification(
+                                        `Encyclopedia saved`
+                                    )
                                     deleteItem('sync-encyclopedias', dt.id); // Isn't working correctly!
                                 }
                             })

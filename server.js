@@ -14,15 +14,15 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 app.use(express.static(path.join(__dirname, "/")));
 
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "/index.html"));
+    res.sendFile(path.join(__dirname, "/index"));
 });
 
 app.get("/encyclopedias", function (req, res) {
-    res.sendFile(path.join(__dirname, "/encyclopedias.html"));
+    res.sendFile(path.join(__dirname, "/encyclopedias"));
 });
 
 app.get("/offline", function (req, res) {
-    res.sendFile(path.join(__dirname, "/offline.html"));
+    res.sendFile(path.join(__dirname, "/offline"));
 });
 
 
