@@ -125,6 +125,44 @@ self.addEventListener('sync', function(event) {
     }
 });
 
+self.addEventListener('periodicsync', (syncEvent) => {
+    if (syncEvent.tag === 'encyclopedias-daily-sync') {
+        syncEvent.waitUntil(
+            readAllData('sync-encyclopedias')
+                .then(function(data) {
+                    for (const dt of data) {
+                        console.log("from indexdb: " + dt.title)
+
+                        fetch('/saveEncyclopedias', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id: dt.id,
+                                title: dt.title,
+                                description: dt.description
+                            })
+                        })
+                            .then(function(res) {
+                                console.log('Sent data', res);
+                                if (res.ok) {
+                                    self.registration.showNotification(
+                                        `Encyclopedia saved`
+                                    )
+                                    deleteItem('sync-encyclopedias', dt.id); // Isn't working correctly!
+                                }
+                            })
+                            .catch(function(err) {
+                                console.log('Error while sending data', err);
+                            });
+                    }
+
+                })
+        );
+    }
+});
+
 self.addEventListener("notificationclick", function (event) {
     let notification = event.notification;
     console.log("notification", notification);

@@ -1,5 +1,3 @@
-import { get, set } from "https://cdn.jsdelivr.net/npm/idb-keyval@6/+esm";
-
 let player = document.getElementById("player");
 let canvas = document.getElementById("canvas");
 
@@ -45,3 +43,17 @@ document.getElementById("capture").addEventListener("click", function (event) {
         alert(err.message)
     }
 });
+
+const registerPeriodicBackgroundSync = async () => {
+    const registration = await navigator.serviceWorker.ready;
+    try {
+        registration.periodicSync.register('encyclopedias-daily-sync', {
+            // An interval of one day.
+            minInterval: 24 * 60 * 60 * 1000,
+        });
+    } catch (err) {
+        console.error(err.name, err.message);
+    }
+};
+
+registerPeriodicBackgroundSync()
